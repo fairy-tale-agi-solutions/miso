@@ -120,6 +120,7 @@ let
         };
         ghc865 = pkgs.haskell.packages.ghc865.override {
           overrides = self: super: with pkgs.haskell.lib; rec {
+            haskell-gi-overloading = self.callHackage "haskell-gi-overloading" "0.0" {};
             jsaddle = self.callCabal2nix "jsaddle" "${jsaddle-src}/jsaddle" {};
             jsaddle-dom = self.callCabal2nix "jsaddle-dom" jsaddle-dom-src {};
             miso = self.callCabal2nix "miso" miso-src-filter {};
@@ -175,7 +176,7 @@ let
   pkgs = import (builtins.fetchTarball {
     url = "https://github.com/NixOS/nixpkgs/archive/${rev}.tar.gz";
     inherit sha256;
-  }) { config.packageOverrides = overrides; config.allowUnfree = true; };
+  }) { config.packageOverrides = overrides; config.allowUnfree = true; config.allowBroken = true; };
   more-examples = import ./nix/examples.nix pkgs;
   uploadCoverage = pkgs.writeScriptBin "upload-coverage.sh" ''
     #!/usr/bin/env bash
